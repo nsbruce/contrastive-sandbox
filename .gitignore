@@ -172,3 +172,5 @@ cython_debug/
 
 # Manual additions
 .devcontainer
+.data
+.models
