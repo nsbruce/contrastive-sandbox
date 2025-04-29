@@ -16,7 +16,8 @@ def main(num_signals: int, num_iq_samples_per_signal: int, impaired: bool, root:
         num_iq_samples_dataset=num_iq_samples_per_signal,
         fft_size= int(math.sqrt(num_iq_samples_per_signal)), # wth is this
         impairment_level= 2 if impaired else 0,
-        num_signals_min = 1
+        num_signals_min = 1,
+        signal_duration_percent_min=100
     )
 
     cpu_count = os.cpu_count()
