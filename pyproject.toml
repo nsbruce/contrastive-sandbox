@@ -19,4 +19,4 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.uv.sources]
-torchsig = { git = "https://github.com/TorchDSP/torchsig.git", tag = "v1.0.0"}
+torchsig = { git = "https://github.com/TorchDSP/torchsig.git", rev = "v1.1.0" }
