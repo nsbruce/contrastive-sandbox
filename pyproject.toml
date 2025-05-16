@@ -9,6 +9,7 @@ dependencies = [
     "dtaidistance",
     "plotly>=6.0.0",
     "torchsig",
+    "numcodecs<0.16.0",
 ]
 
 [project.scripts]
@@ -20,3 +21,8 @@ build-backend = "hatchling.build"
 
 [tool.uv.sources]
 torchsig = { git = "https://github.com/TorchDSP/torchsig.git", rev = "v1.1.0" }
+
+[dependency-groups]
+dev = [
+    "commitizen>=4.7.0",
+]
