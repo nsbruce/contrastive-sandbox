@@ -22,8 +22,3 @@ def load_datamodule(
     )
 
     return datamodule
-
-
-def generate_dataset(metadata: NarrowbandMetadata):
-
-    return NewNarrowband(dataset_metadata=metadata)
