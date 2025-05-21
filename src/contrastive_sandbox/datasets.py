@@ -11,9 +11,8 @@ from torchsig.utils.writer import DatasetCreator
 
 
 def get_train_val_data_module(root: str, impaired: bool = False, num_signals: int | None = None, num_iq_samples_per_signal: int | None = None,  transforms: Optional[list] = None, target_transforms: Optional[list] = None) -> tuple[NarrowbandMetadata, NarrowbandDataModule]:
-
-    root = Path(root) / \
-        f"torchsig_narrowband_{'impaired' if impaired else 'clean'}"
+    """Load training and validation data module if it exists, otherwise generate then load"""
+    root = Path(root)
     train_root = root / "train"
     val_root = root / "val"
 
@@ -58,14 +57,14 @@ def get_train_val_data_module(root: str, impaired: bool = False, num_signals: in
 
 
 def get_test_dataset(root: str, impaired: bool = False, num_signals: int | None = None, num_iq_samples_per_signal: int | None = None, transforms: list | None = None, target_transforms: list | None = None) -> tuple[NarrowbandMetadata, StaticNarrowband]:
-
-    root = Path(root) / \
-        f"torchsig_narrowband_{'impaired' if impaired else 'clean'}"
-    test_root = root / "test"
+    """Load test data set if it exists, otherwise generate then load"""
+    path_identifier = f"torchsig_narrowband_{'impaired' if impaired else 'clean'}"
+    root = Path(root)
+    test_root = root / path_identifier / "test"
 
     try:
         test_meta = to_dataset_metadata(
-            root / 'create_dataset_info.yaml')
+            test_root / path_identifier / 'create_dataset_info.yaml')
     except ValueError:
 
         assert num_iq_samples_per_signal is not None and num_signals is not None, "num_iq_samples_per_signal and num_signals must be provided if the dataset does not exist"
@@ -90,9 +89,6 @@ def get_test_dataset(root: str, impaired: bool = False, num_signals: int | None 
             num_workers=os.cpu_count() if os.cpu_count() is not None else 3,
         )
         dc.create()
-        # if test_root / 'data' directory exists, rename it to 'test'
-        if (test_root / 'data').exists():
-            os.rename(test_root / 'data', test_root / 'test')
 
     test_dataset = StaticNarrowband(
         root=test_root,
