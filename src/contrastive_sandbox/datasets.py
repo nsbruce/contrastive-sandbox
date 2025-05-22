@@ -12,17 +12,19 @@ from torchsig.utils.writer import DatasetCreator
 
 def get_train_val_data_module(root: str, impaired: bool = False, num_signals: int | None = None, num_iq_samples_per_signal: int | None = None,  transforms: Optional[list] = None, target_transforms: Optional[list] = None) -> tuple[NarrowbandMetadata, NarrowbandDataModule]:
     """Load training and validation data module if it exists, otherwise generate then load"""
+
     root = Path(root)
-    train_root = root / "train"
-    val_root = root / "val"
+    path_identifier = f"torchsig_narrowband_{'impaired' if impaired else 'clean'}"
+    train_root = root / path_identifier / "train"
+    val_root = root / path_identifier / "val"
 
     if not train_root.exists() or not val_root.exists():
         assert num_iq_samples_per_signal is not None and num_signals is not None, "num_iq_samples_per_signal and num_signals must be provided if the dataset does not exist"
     else:
         train_meta = to_dataset_metadata(
-            (train_root / 'create_dataset_info.yaml').resolve())
+            str(train_root / 'create_dataset_info.yaml'))
         val_meta = to_dataset_metadata(
-            (val_root / 'create_dataset_info.yaml').resolve())
+            str(val_root / 'create_dataset_info.yaml'))
         num_signals = train_meta.num_samples + val_meta.num_samples
         num_iq_samples_per_signal = train_meta.num_iq_samples_dataset
         assert num_iq_samples_per_signal == val_meta.num_iq_samples_dataset, "num_iq_samples_per_signal must be the same for train and val datasets"
@@ -64,7 +66,7 @@ def get_test_dataset(root: str, impaired: bool = False, num_signals: int | None 
 
     try:
         test_meta = to_dataset_metadata(
-            test_root / path_identifier / 'create_dataset_info.yaml')
+            str(test_root / path_identifier / 'create_dataset_info.yaml'))
     except ValueError:
 
         assert num_iq_samples_per_signal is not None and num_signals is not None, "num_iq_samples_per_signal and num_signals must be provided if the dataset does not exist"
