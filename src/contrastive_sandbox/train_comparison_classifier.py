@@ -20,7 +20,7 @@ model = XCiTClassifier(
     num_classes=len(train_val_metadata.class_list),
 )
 
-num_epochs = 10
+num_epochs = 100
 
 checkpoint_callback = ModelCheckpoint(dirpath='.models/xcit-comparison',
                                       every_n_epochs=1, mode="min", monitor="val_loss", save_top_k=3, save_last=True)
@@ -75,4 +75,4 @@ for sample in test_dataset:
 
 # try increasing num_epochs or train dataset size to increase accuracy
 print(f"Correct Predictions = {num_correct}")
-print(f"Percent Correct = {num_correct / len(test_dataset)}%")
+print(f"Percent Correct = {100 * num_correct / len(test_dataset)}%")
